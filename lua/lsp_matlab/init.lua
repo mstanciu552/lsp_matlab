@@ -15,7 +15,7 @@ M.start = function()
 	-- 	io.write(res)
 	-- end
 	-- @TEST
-	print(rpc.handle_request(utils.send_request("add", { 1, 2, 3 }, 1)))
+	print(rpc.handle_request(utils.send_request("add", { 1, 2, 4 }, 1)))
 
 	os.exit(0)
 end

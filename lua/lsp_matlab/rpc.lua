@@ -10,12 +10,20 @@ local M = {}
 -- @return err -> should be an error code; if err is not nil then send error type response
 -- @return result
 local function analyze(method, params)
+	local err, result
 	for k, v in pairs(methods) do
 		if k == method then
-			return nil, v(params)
+			err, result = v(params)
 		end
 	end
-	return errors.Method_not_found, nil
+	if not err and not result then
+		return errors.Method_not_found, nil
+	end
+	if err then
+		return err, nil
+	else
+		return nil, result
+	end
 end
 
 -- @public
