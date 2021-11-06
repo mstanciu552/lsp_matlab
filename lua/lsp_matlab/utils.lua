@@ -7,6 +7,14 @@ utils.print_table = function(input)
 	end
 end
 
+utils.get_key = function(table, value)
+	for k, v in pairs(table) do
+		if v == value then
+			return k
+		end
+	end
+end
+
 utils.json_encode = function(payload)
 	local ok, encoded = pcall(vim.fn.json_encode, payload)
 	if ok then
@@ -23,6 +31,16 @@ utils.json_decode = function(payload)
 	else
 		return nil, decoded
 	end
+end
+
+utils.send_request = function(method, params, id)
+	local request = {
+		jsonrpc = "2.0",
+		method = method,
+		params = params,
+		id = id,
+	}
+	return utils.json_encode(request)
 end
 
 return utils
