@@ -10,12 +10,12 @@ local M = {}
 -- @return err -> should be an error code; if err is not nil then send error type response
 -- @return result
 local function analyze(method, params)
-	local err, result
-	for k, v in pairs(methods) do
-		if k == method then
-			err, result = v(params)
-		end
-	end
+	local err, result = methods[method](params)
+	-- for k, v in pairs(methods) do
+	-- 	if k == method then
+	-- 		err, result = v(params)
+	-- 	end
+	-- end
 	if not err and not result then
 		return errors.Method_not_found, nil
 	end
@@ -43,23 +43,26 @@ M.send_response = function(request, pipe)
 	end
 
 	local err, result = analyze(request.method, request.params)
-	local response
+	local response = {
+		jsonrpc = "2.0",
+	}
+
+	if request.id then
+		response.id = request.id
+	end
 
 	if err then
-		response = {
-			jsonrpc = "2.0",
-			error = error_handler.send_error(err),
-			id = request.id,
-		}
+		response.error = error_handler.send_error(err)
 	else
-		response = {
-			jsonrpc = "2.0",
-			result = result,
-			id = request.id,
-		}
+		response.result = result
 	end
 
 	pipe:write(utils.json_encode(response))
 end
+
+--- Handles stdin input <=> RPC Calls
+-- @params block -> stdin input
+-- @info optional writes to output; JSON RPC Response
+M.handle_input = function(block) end
 
 return M

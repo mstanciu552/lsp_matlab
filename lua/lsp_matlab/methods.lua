@@ -2,7 +2,7 @@ local errors = require("lsp_matlab.error").defined_errors
 
 local M = {}
 
-M.add = function(params)
+M["add"] = function(params)
 	local sum = 0
 
 	if not params or type(params) ~= "table" then
