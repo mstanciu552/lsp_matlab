@@ -2,7 +2,7 @@
 
 # TODO
 
-- [ ] Add basic RPC
+- [x] Add basic RPC
 - [ ] Add autocompletion for blocks of code(function() ... end)
 - [ ] Add non-matching blocks
 - [ ] Add syntax highlighting for treesitter queries

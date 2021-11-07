@@ -31,7 +31,7 @@ end
 -- @info decodes the requests and asks for a response
 M.handle_request = function(request)
 	local request_table = utils.json_decode(request)
-	M.send_response(request_table)
+	return M.send_response(request_table)
 end
 
 -- @public
@@ -57,7 +57,9 @@ M.send_response = function(request, pipe)
 		response.result = result
 	end
 
-	pipe:write(utils.json_encode(response))
+	local json_response = utils.json_encode(response)
+	pipe:write(json_response)
+	return json_response
 end
 
 --- Handles stdin input <=> RPC Calls

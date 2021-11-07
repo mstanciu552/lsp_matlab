@@ -1,6 +1,8 @@
+-- @Docs https://neovim.io/doc/user/lsp.html
 local M = {}
 local utils = require("lsp_matlab.utils")
 local rpc = require("lsp_matlab.rpc")
+local log = require("lsp_matlab.log")
 
 -- @Info Main function
 M.start = function()
@@ -16,7 +18,7 @@ M.start = function()
 	-- 	rpc.handle_input(block)
 	-- end
 	-- @TEST
-	print(rpc.handle_request(utils.send_request("add", { 1, 2, 4 }, 1)))
+	log(rpc.handle_request(utils.send_request("add", { 1, 2, 4 }, 1)))
 
 	os.exit(0)
 end
@@ -29,6 +31,7 @@ M.setup = function(opts)
 	else
 		M.defaults = require("lsp_matlab.defaults")
 	end
+	M.start()
 end
 
 return M
