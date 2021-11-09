@@ -1,12 +1,12 @@
 -- @Docs https://neovim.io/doc/user/lsp.html
 local M = {}
-local utils = require("lsp_matlab.utils")
-local rpc = require("lsp_matlab.rpc")
-local log = require("lsp_matlab.log")
+local utils = require "lsp_matlab.utils"
+local rpc = require "lsp_matlab.rpc"
+local log = require "lsp_matlab.log"
 
 -- @Info Main function
 M.start = function()
-	print("Server running\n")
+	print "Server running\n"
 	local Shutdown = false
 
 	-- @Info Handle stdin and stdout
@@ -29,9 +29,34 @@ M.setup = function(opts)
 	if opts then
 		M.defaults = opts
 	else
-		M.defaults = require("lsp_matlab.defaults")
+		M.defaults = require "lsp_matlab.defaults"
 	end
-	M.start()
+
+	local configs = require "lspconfig/configs"
+	local util = require "lspconfig/util"
+	local lspconfig = require "lspconfig"
+
+	assert(not lspconfig.matlab, "Server already exists")
+	configs.matlab = {
+		default_config = {
+			filetypes = { "matlab" },
+			root_dir = function(fname)
+				return util.path.dirname(fname)
+			end,
+			cmd = { "nvim", "--headless", "-c", "'lua require('lsp_matlab').start()'" },
+			settings = {},
+		},
+		docs = {
+			description = [[
+      Test description
+    ]],
+			default_config = {
+				root_dir = [[dirname]],
+			},
+		},
+	}
+
+	lspconfig.matlab.setup(opts)
 end
 
 return M

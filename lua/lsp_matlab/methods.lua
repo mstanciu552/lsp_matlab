@@ -1,5 +1,5 @@
 local errors = require("lsp_matlab.error").defined_errors
-local definitions = require("spec.definitions")
+local definitions = require "spec.definitions"
 
 local M = {}
 
@@ -9,8 +9,13 @@ M.state.textDocument = {}
 local storage = {}
 storage.textDocumentItem = {}
 
+M.state.clear = function()
+	storage = {}
+	storage.textDocumentItem = {}
+end
+
 M.state.get_text_document_from_uri = function(uri)
-	return storage.textDocumentItem[uri]
+	return M.state.textDocument[uri]
 end
 
 M.state.textDocument.change = function(textDocument, contentChanges)
@@ -24,6 +29,7 @@ M.state.textDocument.change = function(textDocument, contentChanges)
 	assert(not changes.rangeLength)
 
 	storage.textDocumentItem[textDocument.uri].text = changes.text
+	M.state.textDocument[textDocument.uri].text = changes.text
 
 	-- TODO Continue
 end
@@ -39,6 +45,11 @@ end
 
 M["textDocument/didClose"] = function(params)
 	M.state.textDocument[params.textDocument.uri] = nil
+	storage.textDocumentItem[params.textDocument.uri] = params.textDocument
+end
+
+M["textDocument/didSave"] = function(params)
+	M.state.textDocument[params.textDocument.uri].text = params.text
 end
 
 M["textDocument/definition"] = definitions.jump_definition
