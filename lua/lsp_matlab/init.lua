@@ -57,7 +57,6 @@ M.setup = function(opts)
 	}
 
 	lspconfig.matlab.setup(opts)
-	vim.cmd "set rtp += ./after"
 end
 
 return M
