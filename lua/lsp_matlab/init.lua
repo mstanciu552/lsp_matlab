@@ -15,6 +15,7 @@ M.start = function()
 		if not block then
 			break
 		end
+		log(block)
 		rpc.handle_input(block)
 	end
 	-- @TEST
