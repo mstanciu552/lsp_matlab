@@ -1,7 +1,8 @@
-local utils = require("lsp_matlab.utils")
-local methods = require("lsp_matlab.methods")
-local error_handler = require("lsp_matlab.error")
+local utils = require "lsp_matlab.utils"
+local methods = require "lsp_matlab.methods"
+local error_handler = require "lsp_matlab.error"
 local errors = require("lsp_matlab.error").defined_errors
+local log = require "lsp_matlab.log"
 
 local M = {}
 
@@ -11,14 +12,11 @@ local M = {}
 -- @return result
 local function analyze(method, params)
 	local err, result = methods[method](params)
-	-- for k, v in pairs(methods) do
-	-- 	if k == method then
-	-- 		err, result = v(params)
-	-- 	end
-	-- end
+
 	if not err and not result then
 		return errors.Method_not_found, nil
 	end
+
 	if err then
 		return err, nil
 	else
@@ -65,6 +63,11 @@ end
 --- Handles stdin input <=> RPC Calls
 -- @params block -> stdin input
 -- @info optional writes to output; JSON RPC Response
-M.handle_input = function(block) end
+M.handle_input = function(block)
+	local jsonify = utils.json_decode(block)
+	assert(jsonify.method, "Invalid Request")
+	log(jsonify)
+	return M.analyze(jsonify.method, jsonify.params)
+end
 
 return M

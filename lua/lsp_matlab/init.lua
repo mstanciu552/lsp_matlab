@@ -7,18 +7,18 @@ local log = require "lsp_matlab.log"
 -- @Info Main function
 M.start = function()
 	log "Server running\n"
-	-- local Shutdown = false
+	local Shutdown = false
 
 	-- @Info Handle stdin and stdout
-	-- while not Shutdown do
-	-- 	local block = io.read("*l")
-	-- 	if not block then
-	-- 		break
-	-- 	end
-	-- 	rpc.handle_input(block)
-	-- end
+	while not Shutdown do
+		local block = io.read "*l"
+		if not block then
+			break
+		end
+		rpc.handle_input(block)
+	end
 	-- @TEST
-	log(rpc.handle_request(utils.send_request("add", { 1, 2, 4 }, 1)))
+	-- log(rpc.handle_request(utils.send_request("add", { 1, 2, 4 }, 1)))
 
 	os.exit(0)
 end
