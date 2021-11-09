@@ -1,5 +1,6 @@
 local errors = require("lsp_matlab.error").defined_errors
 local definitions = require "spec.definitions"
+local log = require "lsp_matlab.log"
 
 local M = {}
 
@@ -35,20 +36,24 @@ M.state.textDocument.change = function(textDocument, contentChanges)
 end
 
 M["textDocument/didOpen"] = function(params)
+	log "didOpen"
 	M.state.textDocument[params.textDocument.uri] = params.textDocument
 	storage.textDocumentItem[params.textDocument.uri] = params.textDocument
 end
 
 M["textDocument/didChange"] = function(params)
+	log "didChange"
 	M.state.textDocument.change(params.textDocument, params.contentChanges)
 end
 
 M["textDocument/didClose"] = function(params)
+	log "didClose"
 	M.state.textDocument[params.textDocument.uri] = nil
 	storage.textDocumentItem[params.textDocument.uri] = params.textDocument
 end
 
 M["textDocument/didSave"] = function(params)
+	log "didSave"
 	M.state.textDocument[params.textDocument.uri].text = params.text
 end
 
