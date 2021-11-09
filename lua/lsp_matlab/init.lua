@@ -6,8 +6,8 @@ local log = require "lsp_matlab.log"
 
 -- @Info Main function
 M.start = function()
-	print "Server running\n"
-	local Shutdown = false
+	log "Server running\n"
+	-- local Shutdown = false
 
 	-- @Info Handle stdin and stdout
 	-- while not Shutdown do
