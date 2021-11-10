@@ -36,6 +36,7 @@ M.state.textDocument.change = function(textDocument, contentChanges)
 end
 
 M["textDocument/didOpen"] = function(params)
+	io.write "didOpen"
 	log "didOpen"
 	M.state.textDocument[params.textDocument.uri] = params.textDocument
 	storage.textDocumentItem[params.textDocument.uri] = params.textDocument

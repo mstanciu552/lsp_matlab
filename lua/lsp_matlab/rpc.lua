@@ -13,7 +13,7 @@ local M = {}
 local function analyze(method, params)
 	local err, result = methods[method](params)
 
-	if not err and not result then
+	if not methods[method] then
 		return errors.Method_not_found, nil
 	end
 
@@ -66,8 +66,7 @@ end
 M.handle_input = function(block)
 	local jsonify = utils.json_decode(block)
 	assert(jsonify.method, "Invalid Request")
-	log(jsonify)
-	return M.analyze(jsonify.method, jsonify.params)
+	return analyze(jsonify.method, jsonify.params)
 end
 
 return M

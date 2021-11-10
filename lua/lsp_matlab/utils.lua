@@ -1,9 +1,9 @@
 local utils = {}
 
 utils.print_table = function(input)
-	print("Key=Value")
+	io.write "Key=Value"
 	for k, v in pairs(input) do
-		print(string.format("%s=%s", k, v))
+		io.write(string.format("%s=%s", k, v))
 	end
 end
 
@@ -35,7 +35,8 @@ utils.json_encode = function(payload)
 end
 
 utils.json_decode = function(payload)
-	payload = utils.split(payload, "\r\n")[2]
+	local split = utils.split(payload, "\r\n")
+	payload = split[2] or split[1]
 	local ok, decoded = pcall(vim.fn.json_decode, payload)
 	if ok then
 		return decoded
@@ -43,6 +44,8 @@ utils.json_decode = function(payload)
 		return nil, decoded
 	end
 end
+
+-- @info Mimic client
 utils.send_request = function(method, params, id)
 	local request = {
 		jsonrpc = "2.0",
