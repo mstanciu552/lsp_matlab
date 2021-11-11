@@ -5,5 +5,8 @@ run: lua/lsp_matlab/init.lua
 test_rpc: lua/lsp_matlab/methods.lua
 	nvim --headless -c 'set rtp+=./' -c 'PlenaryBustedFile test/basic_rpc.lua'
 
+test_definitions: lua/spec/definitions.lua
+	nvim --headless -c 'set rtp+=./' -c 'PlenaryBustedFile test/definition_method.lua'
+
 test_dir: lua/lsp_matlab/methods.lua
 	nvim --headless -c 'set rtp+=./' -c 'PlenaryBustedDirectory test'

@@ -1,12 +1,11 @@
 -- @Docs https://neovim.io/doc/user/lsp.html
 local M = {}
-local utils = require "lsp_matlab.utils"
 local rpc = require "lsp_matlab.rpc"
 local log = require "lsp_matlab.log"
 
 -- @Info Main function
 M.start = function()
-	log "Server running\n"
+	log "Server started\n"
 	local Shutdown = false
 
 	-- @Info Handle stdin and stdout
@@ -15,11 +14,8 @@ M.start = function()
 		if not block then
 			break
 		end
-		log(block)
 		rpc.handle_input(block)
 	end
-	-- @TEST
-	-- log(rpc.handle_request(utils.send_request("add", { 1, 2, 4 }, 1)))
 
 	os.exit(0)
 end

@@ -7,12 +7,9 @@ local M = {}
 M.state = {}
 M.state.textDocument = {}
 
-local storage = {}
-storage.textDocumentItem = {}
-
 M.state.clear = function()
-	storage = {}
-	storage.textDocumentItem = {}
+	M.state = {}
+	M.state.textDocument = {}
 end
 
 M.state.get_text_document_from_uri = function(uri)
@@ -20,7 +17,7 @@ M.state.get_text_document_from_uri = function(uri)
 end
 
 M.state.textDocument.change = function(textDocument, contentChanges)
-	assert(storage.textDocumentItem[textDocument.uri], "Should have already loaded the textDocument")
+	assert(M.state.textDocumentItem[textDocument.uri], "Should have already loaded the textDocument")
 
 	assert(contentChanges, "Should have some changes")
 	assert(#contentChanges == 1, "Can only handle 1 change")
@@ -29,17 +26,16 @@ M.state.textDocument.change = function(textDocument, contentChanges)
 	assert(not changes.range)
 	assert(not changes.rangeLength)
 
-	storage.textDocumentItem[textDocument.uri].text = changes.text
+	M.state.textDocumentItem[textDocument.uri].text = changes.text
 	M.state.textDocument[textDocument.uri].text = changes.text
 
 	-- TODO Continue
 end
 
 M["textDocument/didOpen"] = function(params)
-	io.write "didOpen"
 	log "didOpen"
+	assert(not M.state.textDocument[params.textDocument.uri], "didOpen already called")
 	M.state.textDocument[params.textDocument.uri] = params.textDocument
-	storage.textDocumentItem[params.textDocument.uri] = params.textDocument
 end
 
 M["textDocument/didChange"] = function(params)
@@ -50,7 +46,6 @@ end
 M["textDocument/didClose"] = function(params)
 	log "didClose"
 	M.state.textDocument[params.textDocument.uri] = nil
-	storage.textDocumentItem[params.textDocument.uri] = params.textDocument
 end
 
 M["textDocument/didSave"] = function(params)

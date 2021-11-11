@@ -1,3 +1,5 @@
+local ts_util = require "nvim-treesitter.ts_util"
+
 local utils = {}
 
 utils.print_table = function(input)
@@ -54,6 +56,17 @@ utils.send_request = function(method, params, id)
 		id = id,
 	}
 	return utils.json_encode(request)
+end
+
+-- FIXME Make use of textDocument to look through for nodes
+utils.get_node_at_position = function(position, textDocument)
+	assert(position.start, "Invalid position format")
+	local cursor_range = { position.start.line[1] - 1, position.start.character[2] }
+	local root = ts_util.get_root_for_position(unpack(cursor_range))
+
+	assert(root, "Error getting root")
+
+	return root:named_descendant_for_range(cursor_range[1], cursor_range[2], cursor_range[1], cursor_range[2])
 end
 
 return utils

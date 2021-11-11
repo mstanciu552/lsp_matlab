@@ -1,4 +1,3 @@
--- require("plenary.test_harness"):setup_busted()
 local methods = require "lsp_matlab.methods"
 local state = require("lsp_matlab.methods").state
 
