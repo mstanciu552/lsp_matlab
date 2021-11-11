@@ -1,4 +1,4 @@
-local ts_util = require "nvim-treesitter.ts_util"
+local ts_util = require "nvim-treesitter.ts_utils"
 local locals = require "nvim-treesitter.locals"
 
 local utils = require "lsp_matlab.utils"
